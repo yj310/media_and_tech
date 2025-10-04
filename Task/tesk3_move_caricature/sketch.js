@@ -1,4 +1,5 @@
 let color = {
+  background: "#000000",
   hairColor: "fceeb1",
   hairColor2: "fceeb1",
   hairColor3: "f2e4ac",
@@ -12,10 +13,16 @@ let color = {
   necklaceJewelColor: "ffffff"
 };
 
-let pos = {
-  faceX: 350,
-  faceY: 170
-};
+
+
+let faceX;
+let faceY;
+
+let catFirstX;
+let catFirstY;
+
+let catX;
+let catY;
 
 let size = {
   faceWidth: 270,
@@ -23,12 +30,24 @@ let size = {
   hairWidth: 300
 };
 
+let eyeLineCloseY = 0;
+
+
+
 function setup() {
+  faceX = 350;
+  faceY = 170;
+  catFirstX = faceX + 80;
+  catFirstY = faceY + 300;
+  catX = catFirstX;
+  catY = catFirstY;
+
   createCanvas(700, 700);
-  background('#000000');
 }
 
 function draw() {
+  background(color.background);
+
   drawBackHair();
   drawNack();
   drawBody();
@@ -44,11 +63,48 @@ function draw() {
   drawCat();
 }
 
+function keyPressed() {
+  print(`keyPressed: ${keyCode}`);
+  if (keyCode === LEFT_ARROW) {
+    catX = catX - 10;
+  }
+  if (keyCode === RIGHT_ARROW) {
+    catX = catX + 10;
+  }
+  if (keyCode === UP_ARROW) {
+    catY = catY - 10;
+  }
+  if (keyCode === DOWN_ARROW) {
+    catY = catY + 10;
+  }
+}
+
+function mouseDragged() {
+
+  /// 마우스 움직임에 따라 눈 라인 움직임
+  if (mouseY > pmouseY && eyeLineCloseY < 30) {
+    eyeLineCloseY = eyeLineCloseY + 2;
+  }
+  if (mouseY < pmouseY && eyeLineCloseY > 0) {
+    eyeLineCloseY = eyeLineCloseY - 2;
+  }
+
+
+  /// 마우스 포인터가 얼굴 안에 들어왔는지 확인
+  if (mouseX > faceX - (size.faceWidth / 2) &&
+    mouseX < faceX + (size.faceWidth / 2) &&
+    mouseY > faceY - (size.faceHeight / 2) &&
+    mouseY < faceY + (size.faceHeight / 2)) {
+
+  }
+}
+
+
 function drawEar() {
   noStroke();
   fill(getColor(color.skinColor));
-  earX = pos.faceX + (size.faceWidth / 2) - 8;
-  earY = pos.faceY + 45;
+  earX = faceX + (size.faceWidth / 2) - 8;
+  earY = faceY + 45;
   earWidth = 30;
   earHeight = 50;
   arc(
@@ -127,9 +183,9 @@ function drawNecklace() {
   strokeWeight(2);
   necklaceWidth = 70;
   necklaceHeight = 20;
-  necklaceStartX = pos.faceX;
+  necklaceStartX = faceX;
   necklaceStartY = bodyY + 1;
-  necklaceEndX = pos.faceX;
+  necklaceEndX = faceX;
   necklaceEndY = necklaceStartY + necklaceHeight;
 
   line(
@@ -169,22 +225,22 @@ function drawBlush() {
   noStroke();
   fill(getColor(color.blushColor, 0, 70));
   ellipse(
-    pos.faceX - glabella,
-    pos.faceY + addY,
+    faceX - glabella,
+    faceY + addY,
     blushWidth,
     blushHeight
   );
   ellipse(
-    pos.faceX + glabella,
-    pos.faceY + addY,
+    faceX + glabella,
+    faceY + addY,
     blushWidth,
     blushHeight
   );
 
   // fill(`${color.blushColor}20`);
   // ellipse(
-  //   pos.faceX, 
-  //   pos.faceY + 40, 
+  //   faceX, 
+  //   faceY + 40, 
   //   40, 
   //   25, 
   // );
@@ -195,8 +251,8 @@ function drawFrontHair() {
   noStroke();
   fill(getColor(color.hairColor));
   arc(
-    pos.faceX,
-    pos.faceY + 10,
+    faceX,
+    faceY + 10,
     size.hairWidth,
     size.faceHeight + 30,
     PI + 0.05,
@@ -208,29 +264,29 @@ function drawFrontHair() {
   fill(getColor(color.skinColor));
   noStroke();
   triangle(
-    pos.faceX - 90, pos.faceY - 40,
-    pos.faceX - 92, pos.faceY + 3,
-    pos.faceX - 100, pos.faceY + 3
+    faceX - 90, faceY - 40,
+    faceX - 92, faceY + 3,
+    faceX - 100, faceY + 3
   );
   triangle(
-    pos.faceX + 72, pos.faceY - 65,
-    pos.faceX + 77, pos.faceY + 3,
-    pos.faceX + 95, pos.faceY + 3
+    faceX + 72, faceY - 65,
+    faceX + 77, faceY + 3,
+    faceX + 95, faceY + 3
   );
 
   triangle(
-    pos.faceX - 68, pos.faceY - 40,
-    pos.faceX - 70, pos.faceY + 3,
-    pos.faceX - 76, pos.faceY + 3
+    faceX - 68, faceY - 40,
+    faceX - 70, faceY + 3,
+    faceX - 76, faceY + 3
   );
 
 
 
   noStroke();
   fill(getColor(color.hairColor));
-  startX = pos.faceX - size.hairWidth / 2;
-  rect(startX, pos.faceY, 40, 700);
-  rect(startX + size.hairWidth, pos.faceY, -40, 700);
+  startX = faceX - size.hairWidth / 2;
+  rect(startX, faceY, 40, 700);
+  rect(startX + size.hairWidth, faceY, -40, 700);
 
 
   glabella = 170;
@@ -244,65 +300,63 @@ function drawFrontHair() {
   stroke(getColor(color.hairColor2));
   strokeWeight(10);
   arc(
-    pos.faceX + (glabella + 10),
-    pos.faceY + addY,
+    faceX + (glabella + 10),
+    faceY + addY,
     hairWidth,
     hairHeight,
     PI / 2 + 0.5, -PI
   );
   arc(
-    pos.faceX - (glabella + 10),
-    pos.faceY + addY,
+    faceX - (glabella + 10),
+    faceY + addY,
     hairWidth,
     hairHeight,
     -PI * 2, PI / 2 - 0.5
   );
 
 
-
-
   noFill();
   stroke(getColor(color.hairColor3));
   strokeWeight(10);
 
-  // lineX = pos.faceX - 60;
-  // lineY = pos.faceY - (size.faceHeight / 2) + 47;
+  // lineX = faceX - 60;
+  // lineY = faceY - (size.faceHeight / 2) + 47;
   // lineWidth = -25;
   // lineHeight = 50;
   // line(lineX, lineY, lineX + lineWidth, lineY + lineHeight);
 
-  lineX = pos.faceX - 30;
-  lineY = pos.faceY - (size.faceHeight / 2) + 20;
+  lineX = faceX - 30;
+  lineY = faceY - (size.faceHeight / 2) + 20;
   lineWidth = -25;
   lineHeight = 15;
   line(lineX, lineY, lineX + lineWidth, lineY + lineHeight);
 
-  lineX = pos.faceX - 15;
-  lineY = pos.faceY - (size.faceHeight / 2) + 20;
+  lineX = faceX - 15;
+  lineY = faceY - (size.faceHeight / 2) + 20;
   lineWidth = -5;
   lineHeight = 20;
   line(lineX, lineY, lineX + lineWidth, lineY + lineHeight);
 
-  lineX = pos.faceX;
-  lineY = pos.faceY - (size.faceHeight / 2) + 20;
+  lineX = faceX;
+  lineY = faceY - (size.faceHeight / 2) + 20;
   lineWidth = 5;
   lineHeight = 25;
   line(lineX, lineY, lineX + lineWidth, lineY + lineHeight);
 
-  lineX = pos.faceX + 20;
-  lineY = pos.faceY - (size.faceHeight / 2) + 20;
+  lineX = faceX + 20;
+  lineY = faceY - (size.faceHeight / 2) + 20;
   lineWidth = 15;
   lineHeight = 20;
   line(lineX, lineY, lineX + lineWidth, lineY + lineHeight);
 
-  //   lineX = pos.faceX + 38;
-  //   lineY = pos.faceY - (size.faceHeight / 2) + 78;
+  //   lineX = faceX + 38;
+  //   lineY = faceY - (size.faceHeight / 2) + 78;
   //   lineWidth = 30;
   //   lineHeight = 30;
   //   line(lineX, lineY, lineX + lineWidth, lineY + lineHeight);
 
-  //   lineX = pos.faceX + 73;
-  //   lineY = pos.faceY - (size.faceHeight / 2) + 62;
+  //   lineX = faceX + 73;
+  //   lineY = faceY - (size.faceHeight / 2) + 62;
   //   lineWidth = 25;
   //   lineHeight = 40;
   //   line(lineX, lineY, lineX + lineWidth, lineY + lineHeight);
@@ -313,44 +367,44 @@ function drawFrontHair() {
   stroke(getColor(color.hairColor4));
   strokeWeight(10);
 
-  lineX = pos.faceX - 85;
-  lineY = pos.faceY - (size.faceHeight / 2) + 67;
+  lineX = faceX - 85;
+  lineY = faceY - (size.faceHeight / 2) + 67;
   lineWidth = -25;
   lineHeight = 55;
   line(lineX, lineY, lineX + lineWidth, lineY + lineHeight);
 
-  lineX = pos.faceX - 45;
-  lineY = pos.faceY - (size.faceHeight / 2) + 82;
+  lineX = faceX - 45;
+  lineY = faceY - (size.faceHeight / 2) + 82;
   lineWidth = -10;
   lineHeight = 45;
   line(lineX, lineY, lineX + lineWidth, lineY + lineHeight);
 
-  lineX = pos.faceX - 15;
-  lineY = pos.faceY - (size.faceHeight / 2) + 90;
+  lineX = faceX - 15;
+  lineY = faceY - (size.faceHeight / 2) + 90;
   lineWidth = -5;
   lineHeight = 30;
   line(lineX, lineY, lineX + lineWidth, lineY + lineHeight);
 
-  lineX = pos.faceX;
-  lineY = pos.faceY - (size.faceHeight / 2) + 90;
+  lineX = faceX;
+  lineY = faceY - (size.faceHeight / 2) + 90;
   lineWidth = 5;
   lineHeight = 30;
   line(lineX, lineY, lineX + lineWidth, lineY + lineHeight);
 
-  lineX = pos.faceX + 20;
-  lineY = pos.faceY - (size.faceHeight / 2) + 87;
+  lineX = faceX + 20;
+  lineY = faceY - (size.faceHeight / 2) + 87;
   lineWidth = 15;
   lineHeight = 30;
   line(lineX, lineY, lineX + lineWidth, lineY + lineHeight);
 
-  lineX = pos.faceX + 40;
-  lineY = pos.faceY - (size.faceHeight / 2) + 84;
+  lineX = faceX + 40;
+  lineY = faceY - (size.faceHeight / 2) + 84;
   lineWidth = 20;
   lineHeight = 35;
   line(lineX, lineY, lineX + lineWidth, lineY + lineHeight);
 
-  //   lineX = pos.faceX + 73;
-  //   lineY = pos.faceY - (size.faceHeight / 2) + 62;
+  //   lineX = faceX + 73;
+  //   lineY = faceY - (size.faceHeight / 2) + 62;
   //   lineWidth = 25;
   //   lineHeight = 40;
   //   line(lineX, lineY, lineX + lineWidth, lineY + lineHeight);
@@ -362,69 +416,69 @@ function drawFrontHair() {
   stroke(getColor(color.hairColor4));
   strokeWeight(4);
 
-  lineX = pos.faceX - 130;
-  lineY = pos.faceY - (size.faceHeight / 2) + 95;
+  lineX = faceX - 130;
+  lineY = faceY - (size.faceHeight / 2) + 95;
   lineWidth = -5;
   lineHeight = 60;
   line(lineX, lineY, lineX + lineWidth, lineY + lineHeight);
 
-  //   lineX = pos.faceX - 110;
-  //   lineY = pos.faceY - (size.faceHeight / 2) + 80;
+  //   lineX = faceX - 110;
+  //   lineY = faceY - (size.faceHeight / 2) + 80;
   //   lineWidth = -15;
   //   lineHeight = 75;
   //   line(lineX, lineY, lineX + lineWidth, lineY + lineHeight);
 
-  lineX = pos.faceX - 80;
-  lineY = pos.faceY - (size.faceHeight / 2) + 80;
+  lineX = faceX - 80;
+  lineY = faceY - (size.faceHeight / 2) + 80;
   lineWidth = -15;
   lineHeight = 55;
   line(lineX, lineY, lineX + lineWidth, lineY + lineHeight);
 
 
-  // lineX = pos.faceX - 65;
-  // lineY = pos.faceY - (size.faceHeight / 2) + 70;
+  // lineX = faceX - 65;
+  // lineY = faceY - (size.faceHeight / 2) + 70;
   // lineWidth = -25;
   // lineHeight = 60;
   // line(lineX, lineY, lineX + lineWidth, lineY + lineHeight);
 
 
-  // lineX = pos.faceX + 30;
-  // lineY = pos.faceY - (size.faceHeight / 2) + 85;
+  // lineX = faceX + 30;
+  // lineY = faceY - (size.faceHeight / 2) + 85;
   // lineWidth = 16;
   // lineHeight = 30;
   // line(lineX, lineY, lineX + lineWidth, lineY + lineHeight);
 
 
-  lineX = pos.faceX + 50;
-  lineY = pos.faceY - (size.faceHeight / 2) + 73;
+  lineX = faceX + 50;
+  lineY = faceY - (size.faceHeight / 2) + 73;
   lineWidth = 26;
   lineHeight = 40;
   line(lineX, lineY, lineX + lineWidth, lineY + lineHeight);
 
 
 
-  lineX = pos.faceX + 76;
-  lineY = pos.faceY - (size.faceHeight / 2) + 70;
+  lineX = faceX + 76;
+  lineY = faceY - (size.faceHeight / 2) + 70;
   lineWidth = 20;
   lineHeight = 55;
   line(lineX, lineY, lineX + lineWidth, lineY + lineHeight);
 
-  lineX = pos.faceX + 96;
-  lineY = pos.faceY - (size.faceHeight / 2) + 70;
+  lineX = faceX + 96;
+  lineY = faceY - (size.faceHeight / 2) + 70;
   lineWidth = 20;
   lineHeight = 75;
   line(lineX, lineY, lineX + lineWidth, lineY + lineHeight);
 
 
-  lineX = pos.faceX + 120;
-  lineY = pos.faceY - (size.faceHeight / 2) + 70;
+  lineX = faceX + 120;
+  lineY = faceY - (size.faceHeight / 2) + 70;
   lineWidth = 5;
   lineHeight = 70;
   line(lineX, lineY, lineX + lineWidth, lineY + lineHeight);
 
 
-  lineX = pos.faceX + 135;
-  lineY = pos.faceY - (size.faceHeight / 2) + 95;
+  lineX = faceX + 135;
+  lineY = faceY - (size.faceHeight / 2) + 95;
   lineWidth = -2;
   lineHeight = 40;
   line(lineX, lineY, lineX + lineWidth, lineY + lineHeight);
@@ -437,8 +491,8 @@ function drawNose() {
   stroke(getColor(color.blushColor, 0, 15));
   strokeWeight(12);
 
-  lineX = pos.faceX - 3;
-  lineY = pos.faceY + 67;
+  lineX = faceX - 3;
+  lineY = faceY + 67;
   lineWidth = 1;
   lineHeight = 5;
   line(lineX, lineY, lineX + lineWidth, lineY + lineHeight);
@@ -453,7 +507,7 @@ function drawMouse() {
   noStroke();
   fill(getColor(color.lipColor));
   ellipse(
-    pos.faceX, pos.faceY + addY + 20, // 위치
+    faceX, faceY + addY + 20, // 위치
     40,
     20
   );
@@ -461,7 +515,7 @@ function drawMouse() {
   // noStroke();
   // fill(getColor(color.lipColor, 0, 80)); 
   // arc(
-  //   pos.faceX, pos.faceY + addY + 16, // 위치
+  //   faceX, faceY + addY + 16, // 위치
   //   80, 
   //   20, 
   //   PI+0.2, -0.2
@@ -474,7 +528,7 @@ function drawMouse() {
   noStroke();
   fill(getColor(color.skinLineColor));
   arc(
-    pos.faceX, pos.faceY + addY, // 위치
+    faceX, faceY + addY, // 위치
     70, 50, // 사이즈
     mouseLevel, PI - mouseLevel, // 각도
     OPEN
@@ -493,15 +547,15 @@ function drawEyeBraw() {
   stroke(getColor(color.skinLineColor, 0, "30"));
   strokeWeight(5);
   arc(
-    pos.faceX - (glabella + 10),
-    pos.faceY + addY,
+    faceX - (glabella + 10),
+    faceY + addY,
     eyeWidth,
     eyeHeight,
     PI + angle1, -angle2
   );
   arc(
-    pos.faceX + (glabella + 10),
-    pos.faceY + addY,
+    faceX + (glabella + 10),
+    faceY + addY,
     eyeWidth,
     eyeHeight,
     PI + angle2, -angle1
@@ -510,152 +564,183 @@ function drawEyeBraw() {
 
 // 눈1
 function drawEye() {
-  glabella = 50;
-  addY = 50;
+  eyeY = faceY + 50;
+  eyeGlabella = 50;
+
+  /// 눈동자
+  glabella = eyeGlabella;
   eyeWidth = 40;
   eyeHeight = 50;
-
   fill(getColor(color.eyeColor));
-  ellipse(
-    pos.faceX - glabella,
-    pos.faceY + addY,
+  ellipse( // 왼쪽
+    faceX - glabella,
+    eyeY,
     eyeWidth,
     eyeHeight
   );
-  ellipse(
-    pos.faceX + glabella,
-    pos.faceY + addY,
+  ellipse( // 오른쪽
+    faceX + glabella,
+    eyeY,
     eyeWidth,
     eyeHeight
   );
 
-  glabella = 50;
-  highlightX = pos.faceX + 13;
-  highlightY = pos.faceY + addY - 7;
+  /// 눈동자 하이라이터 1
+  glabella = eyeGlabella;
+  highlightX = faceX + 13;
+  highlightY = eyeY - 7;
   highlightWidth = 20;
   highlightHeight = 10;
   fill(255);
-  ellipse(
+  ellipse( // 왼쪽
     highlightX - glabella,
     highlightY,
     highlightWidth, highlightHeight
   );
-  ellipse(
+  ellipse( // 오른쪽
     highlightX + glabella,
     highlightY,
     highlightWidth, highlightHeight
   );
 
-  glabella = 50;
-  highlightX = pos.faceX;
-  highlightY = pos.faceY + addY + 15;
+
+  /// 눈동자 하이라이터 2
+  glabella = eyeGlabella;
+  highlightX = faceX;
+  highlightY = eyeY + 15;
   highlightWidth = 23;
   highlightHeight = 10;
   fill("#ffffff20");
-  ellipse(
+  ellipse( // 왼쪽
     highlightX - glabella,
     highlightY,
     highlightWidth, highlightHeight
   );
-  ellipse(
+  ellipse( // 오른쪽
     highlightX + glabella,
     highlightY,
     highlightWidth, highlightHeight
   );
 
-
-  glabella = glabella + 15;
-  addY = addY - 3;
+  ///  눈두덩이
+  glabella = eyeGlabella + 15;
   eyeWidth = 80;
   eyeHeight = 40;
   angle1 = 0.3;
   angle2 = 0.05;
+  lineY = eyeY - 39;
+  fill(getColor(color.skinColor));
+  stroke(getColor(color.skinColor));
+  strokeWeight(10);
+  rect(
+    faceX - glabella - eyeWidth / 2,
+    lineY,
+    eyeWidth,
+    eyeLineCloseY + 15
+  );
+  rect(
+    faceX + glabella - eyeWidth / 2,
+    lineY,
+    eyeWidth,
+    eyeLineCloseY + 15
+  );
+
+  /// 아이라인
+  glabella = eyeGlabella + 15;
+  eyeWidth = 80;
+  eyeHeight = 40;
+  angle1 = 0.3;
+  angle2 = 0.05;
+  lineY = eyeY - 3 + eyeLineCloseY;
   noFill();
   stroke(getColor(color.skinLineColor));
   strokeWeight(10);
   arc(
-    pos.faceX - glabella,
-    pos.faceY + addY,
+    faceX - glabella,
+    lineY,
     eyeWidth,
     eyeHeight,
     PI + angle1, -angle2
   );
   arc(
-    pos.faceX + glabella,
-    pos.faceY + addY,
+    faceX + glabella,
+    lineY,
     eyeWidth,
     eyeHeight,
     PI + angle2, -angle1
   );
 
-  glabella = 60;
-  addY = addY + 33;
+  /// 아이라인 (언더)
+  glabella = eyeGlabella + 10;
   eyeWidth = 60;
   eyeHeight = 20;
   angle1 = 0.5;
   angle2 = 0.4;
+  lineY = eyeY + 30;
   noFill();
   stroke(getColor(color.skinLineColor));
   strokeWeight(6);
   arc(
-    pos.faceX - glabella,
-    pos.faceY + addY,
+    faceX - glabella,
+    lineY,
     eyeWidth,
     eyeHeight,
     PI + angle1, -angle2
   );
   arc(
-    pos.faceX + glabella,
-    pos.faceY + addY,
+    faceX + glabella,
+    lineY,
     eyeWidth,
     eyeHeight,
     PI + angle2, -angle1
   );
 
-  glabella = 55;
-  addY = addY - 48;
+  /// 쌍커풀
+  glabella = eyeGlabella + 5;
   eyeWidth = 60;
   eyeHeight = 20;
   angle1 = 0.8;
   angle2 = 0.2;
+  lineY = eyeY - 18 + eyeLineCloseY;
   noFill();
   stroke(getColor(color.skinLineColor));
   strokeWeight(4);
   arc(
-    pos.faceX - glabella,
-    pos.faceY + addY,
+    faceX - glabella,
+    lineY,
     eyeWidth,
     eyeHeight,
     PI + angle1, -angle2
   );
   arc(
-    pos.faceX + glabella,
-    pos.faceY + addY,
+    faceX + glabella,
+    lineY,
     eyeWidth,
     eyeHeight,
     PI + angle2, -angle1
   );
 
-  glabella = 84;
-  addY = addY - 4;
+
+  /// 속눈썹
+  glabella = eyeGlabella + 34;
   eyeWidth = 50;
   eyeHeight = 3;
   angle1 = 0.8;
   angle2 = 0.2;
+  lineY = eyeY - 22 + eyeLineCloseY;
   noFill();
   stroke(getColor(color.skinLineColor));
-  // stroke('red'); 
   strokeWeight(4);
   arc(
-    pos.faceX - glabella,
-    pos.faceY + addY,
+    faceX - glabella,
+    lineY,
     eyeWidth,
     eyeHeight,
     PI / 2, PI
   );
   arc(
-    pos.faceX + glabella,
-    pos.faceY + addY,
+    faceX + glabella,
+    lineY,
     eyeWidth,
     eyeHeight,
     0, PI / 2
@@ -675,15 +760,15 @@ function drawEye2() {
   stroke(getColor(color.skinLineColor));
   strokeWeight(10);
   arc(
-    pos.faceX - glabella,
-    pos.faceY + addY,
+    faceX - glabella,
+    faceY + addY,
     eyeWidth,
     eyeHeight,
     PI + angle1, -angle2
   );
   arc(
-    pos.faceX + glabella,
-    pos.faceY + addY,
+    faceX + glabella,
+    faceY + addY,
     eyeWidth,
     eyeHeight,
     PI + angle2, -angle1
@@ -694,15 +779,15 @@ function drawEye2() {
   // stroke("#e3c8c8");
   // strokeWeight(2);
   // arc(
-  //   pos.faceX - (glabella + 10), 
-  //   pos.faceY + addY - 10, 
+  //   faceX - (glabella + 10), 
+  //   faceY + addY - 10, 
   //   70, 
   //   40, 
   //   PI + 0.4, -0.1,
   // );
   // arc(
-  //   pos.faceX + (glabella + 10), 
-  //   pos.faceY + addY - 10,
+  //   faceX + (glabella + 10), 
+  //   faceY + addY - 10,
   //   70, 
   //   40, 
   //   PI + 0.1, -0.3,
@@ -714,14 +799,14 @@ function drawHead() {
   strokeWeight(6);
   noStroke();
   fill(getColor(color.skinColor));
-  // ellipse(pos.faceX, pos.faceY, size.faceWidth, size.faceHeight);
-  arc(pos.faceX, pos.faceY, size.faceWidth, size.faceHeight, 0, PI);
+  // ellipse(faceX, faceY, size.faceWidth, size.faceHeight);
+  arc(faceX, faceY, size.faceWidth, size.faceHeight, 0, PI);
 }
 
 function drawBackHair() {
   noStroke();
   fill(getColor(color.hairColor3));
-  rect(pos.faceX - size.hairWidth / 2, pos.faceY, size.hairWidth, 700);
+  rect(faceX - size.hairWidth / 2, faceY, size.hairWidth, 700);
 }
 
 function drawBody() {
@@ -736,7 +821,7 @@ function drawBody() {
   stroke('#666666');
   strokeWeight(80);
   noFill();
-  lineX = pos.faceX + 130;
+  lineX = faceX + 130;
   lineY = bodyY + 70;
   lineWidth = 30;
   lineHeight = 180;
@@ -748,14 +833,14 @@ function drawBody() {
   fill("#666666");
   fill(getColor(color.skinColor2));
   ellipse(
-    pos.faceX,
+    faceX,
     bodyY + (shoulderHeight / 2),
     bodyWidth,
     shoulderHeight
   );
 
   rect(
-    pos.faceX - (bodyWidth / 2),
+    faceX - (bodyWidth / 2),
     bodyY + (shoulderHeight / 2),
     bodyWidth,
     bodyHeight
@@ -766,7 +851,7 @@ function drawBody() {
   noStroke();
   fill("#666666");
   arc(
-    pos.faceX,
+    faceX,
     bodyY + (shoulderHeight / 2),
     bodyWidth,
     shoulderHeight + 20,
@@ -774,7 +859,7 @@ function drawBody() {
   );
 
   arc(
-    pos.faceX,
+    faceX,
     bodyY + (shoulderHeight / 2),
     bodyWidth,
     shoulderHeight + 20,
@@ -782,7 +867,7 @@ function drawBody() {
   );
 
   rect(
-    pos.faceX - (bodyWidth / 2),
+    faceX - (bodyWidth / 2),
     bodyY + (shoulderHeight / 2),
     bodyWidth,
     bodyHeight
@@ -792,7 +877,7 @@ function drawBody() {
   noStroke();
   fill("#666666");
   rect(
-    pos.faceX - (bodyWidth / 2),
+    faceX - (bodyWidth / 2),
     bodyY + (shoulderHeight / 2),
     bodyWidth,
     bodyHeight
@@ -803,9 +888,9 @@ function drawBody() {
   // stroke("#dddddd"); 
   // strokeWeight(3);
   // line(
-  //   pos.faceX, 
+  //   faceX, 
   //   bodyY + (shoulderHeight / 2),  
-  //   pos.faceX, 
+  //   faceX, 
   //   height,  
   // );
 
@@ -817,8 +902,8 @@ function drawNack() {
   fill(getColor(color.skinColor2));
   nackWidth = 50;
   nackHeight = 40;
-  nackX = pos.faceX - nackWidth / 2;
-  nackY = pos.faceY + (size.faceHeight / 2) - 3;
+  nackX = faceX - nackWidth / 2;
+  nackY = faceY + (size.faceHeight / 2) - 3;
 
   rect(nackX, nackY, nackWidth, nackHeight);
 }
@@ -829,11 +914,6 @@ function getColor(originColor, addColor = "000000", opacity = "ff") {
 }
 
 function drawCat() {
-  catX = pos.faceX + 80;
-  catY = pos.faceY + 300;
-
-  // ------------
-
   noStroke();
   fill("#333333");
   currentX = catX;
@@ -960,15 +1040,15 @@ function drawCat() {
   noStroke();
   fill(getColor(color.skinColor2));
   ellipse(
-    pos.faceX - 40, catY + 150, // 위치
+    faceX - 40, faceY + 450, // 위치
     80, 90 // 사이즈
   );
 
   stroke('#707070');
   strokeWeight(75);
   noFill();
-  lineX = pos.faceX + 165;
-  lineY = pos.faceY + 425;
+  lineX = faceX + 165;
+  lineY = faceY + 425;
   lineWidth = -170;
   lineHeight = 40;
   line(lineX, lineY, lineX + lineWidth, lineY + lineHeight);
