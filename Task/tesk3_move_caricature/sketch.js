@@ -65,10 +65,12 @@ function draw() {
 
 function keyPressed() {
   if (keyCode === LEFT_ARROW) {
-    // catX = catX - 10;
+    catX = catX - 10;
+    faceX = faceX - 10;
   }
   if (keyCode === RIGHT_ARROW) {
-    // catX = catX + 10;
+    catX = catX + 10;
+    faceX = faceX + 10;
   }
   if (keyCode === UP_ARROW) {
     // catY = catY - 10;
@@ -84,13 +86,22 @@ function mouseDragged() {
     mouseX < faceX + (size.faceWidth / 2) &&
     mouseY > faceY - (size.faceHeight / 2) &&
     mouseY < faceY + (size.faceHeight / 2)) {
+    // catX += mouseX - pmouseX;
+    eyeLineCloseY += mouseY - pmouseY;
+    if (eyeLineCloseY > 22) {
+      eyeLineCloseY = 22;
+    }
+    if (eyeLineCloseY < 0) {
+      eyeLineCloseY = 0;
+    }
+
     /// 마우스 움직임에 따라 눈 라인 움직임
-    if (mouseY > pmouseY && eyeLineCloseY < 22) {
-      eyeLineCloseY = eyeLineCloseY + 2;
-    }
-    if (mouseY < pmouseY && eyeLineCloseY > 0) {
-      eyeLineCloseY = eyeLineCloseY - 2;
-    }
+    // if (mouseY > pmouseY && eyeLineCloseY < 22) {
+    //   eyeLineCloseY = eyeLineCloseY + 2;
+    // }
+    // if (mouseY < pmouseY && eyeLineCloseY > 0) {
+    //   eyeLineCloseY = eyeLineCloseY - 2;
+    // }
   }
 
   /// 마우스 포인터가 몸통 안에 들어왔는지 확인
