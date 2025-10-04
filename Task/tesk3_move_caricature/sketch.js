@@ -13,8 +13,6 @@ let color = {
   necklaceJewelColor: "ffffff"
 };
 
-
-
 let faceX;
 let faceY;
 
@@ -27,7 +25,9 @@ let catY;
 let size = {
   faceWidth: 270,
   faceHeight: 295,
-  hairWidth: 300
+  hairWidth: 300,
+  bodyWidth: 330,
+  bodyHeight: 500
 };
 
 let eyeLineCloseY = 0;
@@ -52,8 +52,8 @@ function draw() {
   drawNack();
   drawBody();
   drawHead();
-  drawBlush();
   drawEye();
+  drawBlush();
   drawMouse();
   drawNose();
   drawFrontHair();
@@ -64,38 +64,43 @@ function draw() {
 }
 
 function keyPressed() {
-  print(`keyPressed: ${keyCode}`);
   if (keyCode === LEFT_ARROW) {
-    catX = catX - 10;
+    // catX = catX - 10;
   }
   if (keyCode === RIGHT_ARROW) {
-    catX = catX + 10;
+    // catX = catX + 10;
   }
   if (keyCode === UP_ARROW) {
-    catY = catY - 10;
+    // catY = catY - 10;
   }
   if (keyCode === DOWN_ARROW) {
-    catY = catY + 10;
+    // catY = catY + 10;
   }
 }
 
 function mouseDragged() {
-
-  /// 마우스 움직임에 따라 눈 라인 움직임
-  if (mouseY > pmouseY && eyeLineCloseY < 30) {
-    eyeLineCloseY = eyeLineCloseY + 2;
-  }
-  if (mouseY < pmouseY && eyeLineCloseY > 0) {
-    eyeLineCloseY = eyeLineCloseY - 2;
-  }
-
-
   /// 마우스 포인터가 얼굴 안에 들어왔는지 확인
   if (mouseX > faceX - (size.faceWidth / 2) &&
     mouseX < faceX + (size.faceWidth / 2) &&
     mouseY > faceY - (size.faceHeight / 2) &&
     mouseY < faceY + (size.faceHeight / 2)) {
+    /// 마우스 움직임에 따라 눈 라인 움직임
+    if (mouseY > pmouseY && eyeLineCloseY < 22) {
+      eyeLineCloseY = eyeLineCloseY + 2;
+    }
+    if (mouseY < pmouseY && eyeLineCloseY > 0) {
+      eyeLineCloseY = eyeLineCloseY - 2;
+    }
+  }
 
+  /// 마우스 포인터가 몸통 안에 들어왔는지 확인
+  if (mouseX > faceX - (size.bodyWidth / 2) &&
+    mouseX < faceX + (size.bodyWidth / 2) &&
+    mouseY > bodyY &&
+    mouseY < bodyY + size.bodyHeight) {
+    /// 마우스 움직임에 따라 고양이 움직임
+    catX += mouseX - pmouseX;
+    catY += mouseY - pmouseY;
   }
 }
 
@@ -622,7 +627,7 @@ function drawEye() {
     highlightWidth, highlightHeight
   );
 
-  ///  눈두덩이
+  ///  눈두덩이 (위)
   glabella = eyeGlabella + 15;
   eyeWidth = 80;
   eyeHeight = 40;
@@ -643,6 +648,32 @@ function drawEye() {
     lineY,
     eyeWidth,
     eyeLineCloseY + 15
+  );
+
+
+  /// 애굣살 (아래)
+  glabella = eyeGlabella + 15;
+  eyeWidth = 80;
+  eyeHeight = 40;
+  angle1 = 0.3;
+  angle2 = 0.05;
+  lineY = eyeY + 30;
+  fill(getColor(color.skinColor));
+  stroke(getColor(color.skinColor));
+  // fill('red');
+  // stroke('red');
+  strokeWeight(10);
+  rect(
+    faceX - glabella - eyeWidth / 2,
+    lineY,
+    eyeWidth,
+    -(eyeLineCloseY + 2)
+  );
+  rect(
+    faceX + glabella - eyeWidth / 2,
+    lineY,
+    eyeWidth,
+    -(eyeLineCloseY + 2)
   );
 
   /// 아이라인
@@ -676,7 +707,7 @@ function drawEye() {
   eyeHeight = 20;
   angle1 = 0.5;
   angle2 = 0.4;
-  lineY = eyeY + 30;
+  lineY = eyeY + 30 - eyeLineCloseY;
   noFill();
   stroke(getColor(color.skinLineColor));
   strokeWeight(6);
@@ -811,8 +842,7 @@ function drawBackHair() {
 
 function drawBody() {
 
-  bodyWidth = 330;
-  bodyHeight = 500;
+
   shoulderHeight = 130;
   bodyY = 340;
 
@@ -835,15 +865,15 @@ function drawBody() {
   ellipse(
     faceX,
     bodyY + (shoulderHeight / 2),
-    bodyWidth,
+    size.bodyWidth,
     shoulderHeight
   );
 
   rect(
-    faceX - (bodyWidth / 2),
+    faceX - (size.bodyWidth / 2),
     bodyY + (shoulderHeight / 2),
-    bodyWidth,
-    bodyHeight
+    size.bodyWidth,
+    size.bodyHeight
   );
 
 
@@ -853,7 +883,7 @@ function drawBody() {
   arc(
     faceX,
     bodyY + (shoulderHeight / 2),
-    bodyWidth,
+    size.bodyWidth,
     shoulderHeight + 20,
     PI, -PI / 2 - 1.2
   );
@@ -861,26 +891,26 @@ function drawBody() {
   arc(
     faceX,
     bodyY + (shoulderHeight / 2),
-    bodyWidth,
+    size.bodyWidth,
     shoulderHeight + 20,
     -PI / 2 + 1.2, 0
   );
 
   rect(
-    faceX - (bodyWidth / 2),
+    faceX - (size.bodyWidth / 2),
     bodyY + (shoulderHeight / 2),
-    bodyWidth,
-    bodyHeight
+    size.bodyWidth,
+    size.bodyHeight
   );
 
 
   noStroke();
   fill("#666666");
   rect(
-    faceX - (bodyWidth / 2),
+    faceX - (size.bodyWidth / 2),
     bodyY + (shoulderHeight / 2),
-    bodyWidth,
-    bodyHeight
+    size.bodyWidth,
+    size.bodyHeight
   );
 
 
