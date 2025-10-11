@@ -1,5 +1,6 @@
 let color = {
-  background: "#000000",
+  background: "#15183d",
+  moonColor: "#f6ffb3",
   hairColor: "fceeb1",
   hairColor2: "fceeb1",
   hairColor3: "f2e4ac",
@@ -37,18 +38,59 @@ let catY;
 /// 눈 라인 위치 (마우스에 따른 위치 이동을 제어하기 위한 변수)
 let eyeLineCloseY = 0;
 
+/// 달 위치
+let movingMoonY = 120;
+let moonDirection = 1;
+let tick = 0;
+
+/// 별 위치
+let starLocation = [
+  // { x: 200, y: 200 },
+  // { x: 300, y: 100 },
+  // { x: 50, y: 50 },
+  // { x: 570, y: 330 }, 
+  // { x: 20, y: 330 },
+  // { x: 450, y: 230 }
+];
+let starColors = [
+  '#f6ffb390',
+  '#ffffff80',
+  '#ffffff',
+  '#ffffff50',
+  '#ffffff20',
+  '#e3faff',
+];
+
 /// 초기 세팅
 function setup() {
   faceX = 350;
-  faceY = 170;
+  faceY = 200;
   catX = faceX + 80;
   catY = faceY + 300;
 
   createCanvas(700, 700);
 }
 
+/// update
 function draw() {
+  setTick();
+
   background(color.background);
+
+  /// 달
+  moveMoon();
+  drawMoon(600, movingMoonY, color.moonColor);
+
+  /// 별 
+  for (let i = 0; i < starLocation.length; i++) {
+    starColor = starColors[i % starColors.length];
+    starX = starLocation[i].x;
+    starY = starLocation[i].y;
+    drawStar(starX, starY, starColor);
+  }
+
+  /// 별똥별
+  drawShootingStar();
 
   /// 뒷머리
   drawBackHair();
@@ -150,6 +192,15 @@ function mouseDragged() {
     /// 마우스 움직임에 따라 고양이 움직임
     catX += mouseX - pmouseX;
     catY += mouseY - pmouseY;
+  }
+}
+
+/// 마우스 클릭 이벤트
+function mouseClicked() {
+  starLocation.push({ x: mouseX, y: mouseY });
+  let maxStarCount = 100;
+  if (starLocation.length >= maxStarCount) {
+    starLocation[starLocation.length - maxStarCount] = { x: -50, y: -50 };
   }
 }
 
@@ -359,34 +410,9 @@ function drawFrontHair() {
   angle1 = 0.2;
   angle2 = 0.8;
 
-  // noFill();
-  // stroke(getColor(color.hairColor2));
-  // strokeWeight(10);
-  // arc(
-  //   faceX + (glabella + 10),
-  //   faceY + addY,
-  //   hairWidth,
-  //   hairHeight,
-  //   PI / 2 + 0.5, -PI
-  // );
-  // arc(
-  //   faceX - (glabella + 10),
-  //   faceY + addY,
-  //   hairWidth,
-  //   hairHeight,
-  //   -PI * 2, PI / 2 - 0.5
-  // );
-
-
   noFill();
   stroke(getColor(color.hairColor3));
   strokeWeight(10);
-
-  // lineX = faceX - 60;
-  // lineY = faceY - (size.faceHeight / 2) + 47;
-  // lineWidth = -25;
-  // lineHeight = 50;
-  // line(lineX, lineY, lineX + lineWidth, lineY + lineHeight);
 
   lineX = faceX - 30;
   lineY = faceY - (size.faceHeight / 2) + 20;
@@ -411,20 +437,6 @@ function drawFrontHair() {
   lineWidth = 15;
   lineHeight = 20;
   line(lineX, lineY, lineX + lineWidth, lineY + lineHeight);
-
-  //   lineX = faceX + 38;
-  //   lineY = faceY - (size.faceHeight / 2) + 78;
-  //   lineWidth = 30;
-  //   lineHeight = 30;
-  //   line(lineX, lineY, lineX + lineWidth, lineY + lineHeight);
-
-  //   lineX = faceX + 73;
-  //   lineY = faceY - (size.faceHeight / 2) + 62;
-  //   lineWidth = 25;
-  //   lineHeight = 40;
-  //   line(lineX, lineY, lineX + lineWidth, lineY + lineHeight);
-
-
 
   noFill();
   stroke(getColor(color.hairColor4));
@@ -466,15 +478,6 @@ function drawFrontHair() {
   lineHeight = 35;
   line(lineX, lineY, lineX + lineWidth, lineY + lineHeight);
 
-  //   lineX = faceX + 73;
-  //   lineY = faceY - (size.faceHeight / 2) + 62;
-  //   lineWidth = 25;
-  //   lineHeight = 40;
-  //   line(lineX, lineY, lineX + lineWidth, lineY + lineHeight);
-
-
-
-
   noFill();
   stroke(getColor(color.hairColor4));
   strokeWeight(4);
@@ -485,11 +488,11 @@ function drawFrontHair() {
   lineHeight = 60;
   line(lineX, lineY, lineX + lineWidth, lineY + lineHeight);
 
-  //   lineX = faceX - 110;
-  //   lineY = faceY - (size.faceHeight / 2) + 80;
-  //   lineWidth = -15;
-  //   lineHeight = 75;
-  //   line(lineX, lineY, lineX + lineWidth, lineY + lineHeight);
+  lineX = faceX - 110;
+  lineY = faceY - (size.faceHeight / 2) + 80;
+  lineWidth = -15;
+  lineHeight = 75;
+  line(lineX, lineY, lineX + lineWidth, lineY + lineHeight);
 
   lineX = faceX - 80;
   lineY = faceY - (size.faceHeight / 2) + 80;
@@ -498,26 +501,11 @@ function drawFrontHair() {
   line(lineX, lineY, lineX + lineWidth, lineY + lineHeight);
 
 
-  // lineX = faceX - 65;
-  // lineY = faceY - (size.faceHeight / 2) + 70;
-  // lineWidth = -25;
-  // lineHeight = 60;
-  // line(lineX, lineY, lineX + lineWidth, lineY + lineHeight);
-
-
-  // lineX = faceX + 30;
-  // lineY = faceY - (size.faceHeight / 2) + 85;
-  // lineWidth = 16;
-  // lineHeight = 30;
-  // line(lineX, lineY, lineX + lineWidth, lineY + lineHeight);
-
-
   lineX = faceX + 50;
   lineY = faceY - (size.faceHeight / 2) + 73;
   lineWidth = 26;
   lineHeight = 40;
   line(lineX, lineY, lineX + lineWidth, lineY + lineHeight);
-
 
 
   lineX = faceX + 76;
@@ -868,17 +856,17 @@ function drawEye2() {
   // stroke("#e3c8c8");
   // strokeWeight(2);
   // arc(
-  //   faceX - (glabella + 10), 
-  //   faceY + addY - 10, 
-  //   70, 
-  //   40, 
+  //   faceX - (glabella + 10),
+  //   faceY + addY - 10,
+  //   70,
+  //   40,
   //   PI + 0.4, -0.1,
   // );
   // arc(
-  //   faceX + (glabella + 10), 
+  //   faceX + (glabella + 10),
   //   faceY + addY - 10,
-  //   70, 
-  //   40, 
+  //   70,
+  //   40,
   //   PI + 0.1, -0.3,
   // );
 }
@@ -902,7 +890,7 @@ function drawBody() {
 
 
   shoulderHeight = 130;
-  bodyY = 340;
+  bodyY = faceY + 170;
 
 
 
@@ -1141,6 +1129,75 @@ function drawCat() {
   lineHeight = 40;
   line(lineX, lineY, lineX + lineWidth, lineY + lineHeight);
 
+}
+
+/// 달
+function drawMoon(moonX, moonY, moonColor) {
+  let moonSize = 120;
+  noStroke();
+  fill(moonColor);
+  ellipse(moonX, moonY, moonSize, moonSize);
+
+  fill(color.background);
+  ellipse(moonX + 14, moonY - 8, moonSize - 30, moonSize - 30);
+  fill(`#ffffff04`);
+
+  for (let i = 0; i < 40; i++) {
+    let size = moonSize + 10 + i * 10;
+    ellipse(moonX, moonY, size, size);
+  }
+}
+
+/// 달 움직임
+function moveMoon() {
+  if ((tick % 3) == 0) {
+    movingMoonY += (0.5 * moonDirection);
+  }
+
+  if ((tick % 70) == 0) {
+    moonDirection *= -1;
+  }
+}
+
+/// 틱 세팅
+function setTick() {
+  tick += 1;
+  tick %= 1000000000;
+}
 
 
+/// 별
+function drawStar(starX, starY, starColor) {
+  starTick = int(tick / 3);
+  noStroke();
+  fill(starColor);
+  ellipse(starX, starY, 4, 4);
+
+  maxSpread = 20;
+  currentTick = (starTick + starX) % maxSpread;
+
+  counter = int(currentTick <= (maxSpread / 2) ? currentTick : maxSpread - currentTick);
+
+  transparency = `${counter < 10 ? '0' : ''}${counter}`;
+  // transparency = int(counter % 10);
+  fill(`#ffffff${transparency}`);
+
+  spread = counter / 3;
+  ellipse(starX, starY, 50 + spread, 50 + spread);
+
+  for (let i = 0; i < 5; i++) {
+    let size = 30 + spread + i * 10;
+    ellipse(starX, starY, size, size);
+  }
+}
+
+/// 별똥별
+function drawShootingStar() {
+  shootingStarTick = tick % 400;
+  startTime = 80;
+  if (startTime < shootingStarTick && shootingStarTick < startTime + 50) {
+    shotingStartTick = (shootingStarTick - startTime) * 20;
+    moveLocation = int(shotingStartTick * 4);
+    drawStar(700 - moveLocation, moveLocation / 2, '#e3faff');
+  }
 }
