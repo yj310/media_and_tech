@@ -44,14 +44,30 @@ let moonDirection = 1;
 let tick = 0;
 
 /// 별 위치
-let starLocation = [
-  // { x: 200, y: 200 },
-  // { x: 300, y: 100 },
-  // { x: 50, y: 50 },
-  // { x: 570, y: 330 }, 
-  // { x: 20, y: 330 },
-  // { x: 450, y: 230 }
-];
+let star1X = null;
+let star1Y = null;
+let star2X = null;
+let star2Y = null;
+let star3X = null;
+let star3Y = null;
+let star4X = null;
+let star4Y = null;
+let star5X = null;
+let star5Y = null;
+let star6X = null;
+let star6Y = null;
+let star7X = null;
+let star7Y = null;
+let star8X = null;
+let star8Y = null;
+let star9X = null;
+let star9Y = null;
+let star10X = null;
+let star10Y = null;
+// 배열을 사용할 수 없어 주석처리
+// let starLocation = [];
+
+
 let starColors = [
   '#f6ffb390',
   '#ffffff80',
@@ -82,12 +98,7 @@ function draw() {
   drawMoon(600, movingMoonY, color.moonColor);
 
   /// 별 
-  for (let i = 0; i < starLocation.length; i++) {
-    starColor = starColors[i % starColors.length];
-    starX = starLocation[i].x;
-    starY = starLocation[i].y;
-    drawStar(starX, starY, starColor);
-  }
+  drawStars();
 
   /// 별똥별
   drawShootingStar();
@@ -150,6 +161,40 @@ function keyPressed() {
   if (keyCode === DOWN_ARROW) {
     // catY = catY + 10;
   }
+
+  /// 하늘 색상 변화
+  if (key === '1') {
+    color.background = '#141B2D';
+  }
+  if (key === '2') {
+    color.background = '#1E2E46';
+  }
+  if (key === '3') {
+    color.background = '#4A5A7F';
+  }
+  if (key === '4') {
+    color.background = '#b0b5d6';
+  }
+  if (key === '5') {
+    color.background = '#cbe6f7';
+  }
+  if (key === '6') {
+    color.background = '#B5E4F9';
+  }
+  if (key === '7') {
+    color.background = '#A9D6F1';
+  }
+  if (key === '8') {
+    color.background = '#e8cae4';
+  }
+  if (key === '9') {
+    color.background = '#6C7293';
+  }
+  if (key === '0') {
+    color.background = '#222845';
+  }
+
+
 }
 
 /// 마우스 드래그 이벤트 처리
@@ -197,11 +242,64 @@ function mouseDragged() {
 
 /// 마우스 클릭 이벤트
 function mouseClicked() {
-  starLocation.push({ x: mouseX, y: mouseY });
-  let maxStarCount = 100;
-  if (starLocation.length >= maxStarCount) {
-    starLocation[starLocation.length - maxStarCount] = { x: -50, y: -50 };
+  if (star1X == null || star1Y == null) {
+    star1X = mouseX;
+    star1Y = mouseY;
+    return;
   }
+  if (star2X == null || star2Y == null) {
+    star2X = mouseX;
+    star2Y = mouseY;
+    return;
+  }
+  if (star3X == null || star3Y == null) {
+    star3X = mouseX;
+    star3Y = mouseY;
+    return;
+  }
+  if (star4X == null || star4Y == null) {
+    star4X = mouseX;
+    star4Y = mouseY;
+    return;
+  }
+  if (star5X == null || star5Y == null) {
+    star5X = mouseX;
+    star5Y = mouseY;
+    return;
+  }
+  if (star6X == null || star6Y == null) {
+    star6X = mouseX;
+    star6Y = mouseY;
+    return;
+  }
+  if (star7X == null || star7Y == null) {
+    star7X = mouseX;
+    star7Y = mouseY;
+    return;
+  }
+  if (star8X == null || star8Y == null) {
+    star8X = mouseX;
+    star8Y = mouseY;
+    return;
+  }
+  if (star9X == null || star9Y == null) {
+    star9X = mouseX;
+    star9Y = mouseY;
+    return;
+  }
+  if (star10X == null || star10Y == null) {
+    star10X = mouseX;
+    star10Y = mouseY;
+    return;
+  }
+
+
+  /// 배열을 사용할 수 없어 주석처리
+  // starLocation.push({ x: mouseX, y: mouseY });
+  // let maxStarCount = 100;
+  // if (starLocation.length >= maxStarCount) {
+  //   starLocation[starLocation.length - maxStarCount] = { x: -50, y: -50 };
+  // }
 }
 
 /// 귀
@@ -1200,4 +1298,66 @@ function drawShootingStar() {
     moveLocation = int(shotingStartTick * 4);
     drawStar(700 - moveLocation, moveLocation / 2, '#e3faff');
   }
+}
+
+/// 별 전체 그리기
+function drawStars() {
+  if (star1X != null && star1Y != null) {
+    i = 0;
+    starColor = starColors[i % starColors.length];
+    drawStar(star1X, star1Y, starColor);
+  }
+  if (star2X != null && star2Y != null) {
+    i = 1;
+    starColor = starColors[i % starColors.length];
+    drawStar(star2X, star2Y, starColor);
+  }
+  if (star3X != null && star3Y != null) {
+    i = 2;
+    starColor = starColors[i % starColors.length];
+    drawStar(star3X, star3Y, starColor);
+  }
+  if (star4X != null && star4Y != null) {
+    i = 3;
+    starColor = starColors[i % starColors.length];
+    drawStar(star4X, star4Y, starColor);
+  }
+  if (star5X != null && star5Y != null) {
+    i = 4;
+    starColor = starColors[i % starColors.length];
+    drawStar(star5X, star5Y, starColor);
+  }
+  if (star6X != null && star6Y != null) {
+    i = 5;
+    starColor = starColors[i % starColors.length];
+    drawStar(star6X, star6Y, starColor);
+  }
+  if (star7X != null && star7Y != null) {
+    i = 6;
+    starColor = starColors[i % starColors.length];
+    drawStar(star7X, star7Y, starColor);
+  }
+  if (star8X != null && star8Y != null) {
+    i = 7;
+    starColor = starColors[i % starColors.length];
+    drawStar(star8X, star8Y, starColor);
+  }
+  if (star9X != null && star9Y != null) {
+    i = 8;
+    starColor = starColors[i % starColors.length];
+    drawStar(star9X, star9Y, starColor);
+  }
+  if (star10X != null && star10Y != null) {
+    i = 9;
+    starColor = starColors[i % starColors.length];
+    drawStar(star10X, star10Y, starColor);
+  }
+
+  /// 배열을 사용할 수 없어 주석처리
+  // for (let i = 0; i < starLocation.length; i++) {
+  //   starColor = starColors[i % starColors.length];
+  //   starX = starLocation[i].x;
+  //   starY = starLocation[i].y;
+  //   drawStar(starX, starY, starColor);
+  // }
 }
