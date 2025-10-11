@@ -216,6 +216,11 @@ function keyPressed() {
   }
 
 
+
+  /// 영상 녹화
+  if (key === 's') {
+    saveGif('mySketch', 5);
+  }
 }
 
 /// 마우스 드래그 이벤트 처리
