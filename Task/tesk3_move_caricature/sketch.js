@@ -13,34 +13,36 @@ let color = {
   necklaceJewelColor: "ffffff"
 };
 
-let faceX;
-let faceY;
-
-let catFirstX;
-let catFirstY;
-
-let catX;
-let catY;
-
 let size = {
+  // 얼굴 크기
   faceWidth: 270,
   faceHeight: 295,
+
+  /// 머리카락 크기
   hairWidth: 300,
+
+  /// 몸통 크기
   bodyWidth: 330,
   bodyHeight: 500
 };
 
+/// 얼굴 위치
+let faceX;
+let faceY;
+
+/// 고양이 위치
+let catX;
+let catY;
+
+/// 눈 라인 위치 (마우스에 따른 위치 이동을 제어하기 위한 변수)
 let eyeLineCloseY = 0;
 
-
-
+/// 초기 세팅
 function setup() {
   faceX = 350;
   faceY = 170;
-  catFirstX = faceX + 80;
-  catFirstY = faceY + 300;
-  catX = catFirstX;
-  catY = catFirstY;
+  catX = faceX + 80;
+  catY = faceY + 300;
 
   createCanvas(700, 700);
 }
@@ -48,21 +50,49 @@ function setup() {
 function draw() {
   background(color.background);
 
+  /// 뒷머리
   drawBackHair();
+
+  /// 목
   drawNack();
+
+  /// 몸
   drawBody();
+
+  /// 얼굴
   drawHead();
+
+  /// 눈
   drawEye();
+
+  /// 블러셔
   drawBlush();
+
+  /// 입
   drawMouse();
+
+  /// 코
   drawNose();
+
+  /// 앞머리
   drawFrontHair();
+
+  /// 눈썹
   drawEyeBraw();
+
+  /// 목걸이
   drawNecklace();
+
+  /// 귀
   drawEar();
+
+  /// 고양이
   drawCat();
 }
 
+/// 키보드 입력 이벤트 처리
+/// 
+/// 1. 키보드 좌 우 입력에 따라 캐릭터 전체 이동
 function keyPressed() {
   if (keyCode === LEFT_ARROW) {
     catX = catX - 10;
@@ -80,14 +110,22 @@ function keyPressed() {
   }
 }
 
+/// 마우스 드래그 이벤트 처리
+/// 
+/// 1. 마우스 포인터가 얼굴 안에 들어왔다면
+///    마우스 위 아래 움직임에 따라 눈 모양 변경
+///
+/// 2. 마우스 포인터가 몸통 안에 들어왔다면
+///    마우스 움직임에 따라 고양이 움직임
 function mouseDragged() {
   /// 마우스 포인터가 얼굴 안에 들어왔는지 확인
   if (mouseX > faceX - (size.faceWidth / 2) &&
     mouseX < faceX + (size.faceWidth / 2) &&
     mouseY > faceY - (size.faceHeight / 2) &&
     mouseY < faceY + (size.faceHeight / 2)) {
-    // catX += mouseX - pmouseX;
     eyeLineCloseY += mouseY - pmouseY;
+
+    /// 눈 움직임 최대/최소값 제어
     if (eyeLineCloseY > 22) {
       eyeLineCloseY = 22;
     }
@@ -115,8 +153,9 @@ function mouseDragged() {
   }
 }
 
-
+/// 귀
 function drawEar() {
+  /// 오른쪽 귀
   noStroke();
   fill(getColor(color.skinColor));
   earX = faceX + (size.faceWidth / 2) - 8;
@@ -133,7 +172,7 @@ function drawEar() {
     OPEN
   );
 
-
+  /// 귀걸이
   stroke("#cccccc");
   strokeWeight(1);
   fill('#ffffff');
@@ -143,6 +182,7 @@ function drawEar() {
     10, 10
   );
 
+  /// 귀걸이 푸른보석
   noStroke();
   fill('#d7faf8');
   ellipse(
@@ -151,7 +191,7 @@ function drawEar() {
     7, 6
   );
 
-
+  /// 귀걸이 라인
   stroke("#cccccc");
   strokeWeight(1);
   noFill();
@@ -161,6 +201,8 @@ function drawEar() {
     10, 10
   );
 
+
+  /// 귀걸이 반짝임 표시
   noStroke();
   fill('#ffffff20');
   ellipse(
@@ -173,27 +215,29 @@ function drawEar() {
     earY + 20,
     20, 20
   );
-
   ellipse(
     earX + 3,
     earY + 20,
     10, 10
   );
 
+  // noFill()
+  // stroke('#ffffff70');
+  // strokeWeight(2);
+  // line(earX - 15, earY, earX + 40, earY + 60);
+  // line(earX - 10, earY + 48, earX + 20, earY - 10);
 
-  //   noFill()
-  //   stroke('#ffffff70'); 
-  //   strokeWeight(2);
-  //   line(earX - 15, earY, earX + 40, earY + 60);
-  //   line(earX - 10, earY + 48, earX + 20, earY - 10);
 
-
-  //   stroke('#ffffff50'); 
-  //   strokeWeight(10);
-  //   line(earX - 8, earY + 46, earX + 16, earY - 6);
+  // stroke('#ffffff50');
+  // strokeWeight(10);
+  // line(earX - 8, earY + 46, earX + 16, earY - 6);
 }
 
+
+/// 목걸이
 function drawNecklace() {
+
+  /// 목걸이 줄
   noFill();
   stroke("#dddddd");
   strokeWeight(2);
@@ -203,7 +247,6 @@ function drawNecklace() {
   necklaceStartY = bodyY + 1;
   necklaceEndX = faceX;
   necklaceEndY = necklaceStartY + necklaceHeight;
-
   line(
     necklaceStartX - (necklaceWidth / 2),
     necklaceStartY,
@@ -217,8 +260,7 @@ function drawNecklace() {
     necklaceEndY
   );
 
-  // noStroke();
-
+  /// 목걸이 보석
   stroke("#dddddd");
   strokeWeight(1);
   fill(getColor(color.necklaceJewelColor));
@@ -232,12 +274,12 @@ function drawNecklace() {
   );
 }
 
+/// 블러셔
 function drawBlush() {
   glabella = 70;
   addY = 80;
   blushWidth = 60;
   blushHeight = 20;
-
   noStroke();
   fill(getColor(color.blushColor, 0, 70));
   ellipse(
@@ -262,8 +304,11 @@ function drawBlush() {
   // );
 }
 
+
+/// 앞머리
 function drawFrontHair() {
 
+  /// 앞머리
   noStroke();
   fill(getColor(color.hairColor));
   arc(
@@ -276,28 +321,30 @@ function drawFrontHair() {
     OPEN
   );
 
-
+  /// 앞머리 빈공간
   fill(getColor(color.skinColor));
   noStroke();
+  /// 왼쪽 1
   triangle(
     faceX - 90, faceY - 40,
     faceX - 92, faceY + 3,
     faceX - 100, faceY + 3
   );
+  /// 왼쪽 2
+  triangle(
+    faceX - 68, faceY - 40,
+    faceX - 70, faceY + 3,
+    faceX - 76, faceY + 3
+  );
+  /// 오른쪽 1
   triangle(
     faceX + 72, faceY - 65,
     faceX + 77, faceY + 3,
     faceX + 95, faceY + 3
   );
 
-  triangle(
-    faceX - 68, faceY - 40,
-    faceX - 70, faceY + 3,
-    faceX - 76, faceY + 3
-  );
 
-
-
+  /// 옆머리
   noStroke();
   fill(getColor(color.hairColor));
   startX = faceX - size.hairWidth / 2;
@@ -312,23 +359,23 @@ function drawFrontHair() {
   angle1 = 0.2;
   angle2 = 0.8;
 
-  noFill();
-  stroke(getColor(color.hairColor2));
-  strokeWeight(10);
-  arc(
-    faceX + (glabella + 10),
-    faceY + addY,
-    hairWidth,
-    hairHeight,
-    PI / 2 + 0.5, -PI
-  );
-  arc(
-    faceX - (glabella + 10),
-    faceY + addY,
-    hairWidth,
-    hairHeight,
-    -PI * 2, PI / 2 - 0.5
-  );
+  // noFill();
+  // stroke(getColor(color.hairColor2));
+  // strokeWeight(10);
+  // arc(
+  //   faceX + (glabella + 10),
+  //   faceY + addY,
+  //   hairWidth,
+  //   hairHeight,
+  //   PI / 2 + 0.5, -PI
+  // );
+  // arc(
+  //   faceX - (glabella + 10),
+  //   faceY + addY,
+  //   hairWidth,
+  //   hairHeight,
+  //   -PI * 2, PI / 2 - 0.5
+  // );
 
 
   noFill();
