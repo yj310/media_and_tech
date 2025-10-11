@@ -67,15 +67,26 @@ let star10Y = null;
 // 배열을 사용할 수 없어 주석처리
 // let starLocation = [];
 
-
-let starColors = [
-  '#f6ffb390',
-  '#ffffff80',
-  '#ffffff',
-  '#ffffff50',
-  '#ffffff20',
-  '#e3faff',
-];
+/// 별 색상
+let starColor1 = '#f6ffb390';
+let starColor2 = '#ffffff80';
+let starColor3 = '#ffffff';
+let starColor4 = '#ffffff50';
+let starColor5 = '#ffffff20';
+let starColor6 = '#e3faff';
+let starColor7 = '#f6ffb390';
+let starColor8 = '#ffffff80';
+let starColor9 = '#ffffff';
+let starColor10 = '#ffffff50';
+// 배열을 사용할 수 없어 주석처리
+// let starColors = [
+//   '#f6ffb390',
+//   '#ffffff80',
+//   '#ffffff',
+//   '#ffffff50',
+//   '#ffffff20',
+//   '#e3faff',
+// ];
 
 /// 초기 세팅
 function setup() {
@@ -1303,54 +1314,34 @@ function drawShootingStar() {
 /// 별 전체 그리기
 function drawStars() {
   if (star1X != null && star1Y != null) {
-    i = 0;
-    starColor = starColors[i % starColors.length];
-    drawStar(star1X, star1Y, starColor);
+    drawStar(star1X, star1Y, starColor1);
   }
   if (star2X != null && star2Y != null) {
-    i = 1;
-    starColor = starColors[i % starColors.length];
-    drawStar(star2X, star2Y, starColor);
+    drawStar(star2X, star2Y, starColor2);
   }
   if (star3X != null && star3Y != null) {
-    i = 2;
-    starColor = starColors[i % starColors.length];
-    drawStar(star3X, star3Y, starColor);
+    drawStar(star3X, star3Y, starColor3);
   }
   if (star4X != null && star4Y != null) {
-    i = 3;
-    starColor = starColors[i % starColors.length];
-    drawStar(star4X, star4Y, starColor);
+    drawStar(star4X, star4Y, starColor4);
   }
   if (star5X != null && star5Y != null) {
-    i = 4;
-    starColor = starColors[i % starColors.length];
-    drawStar(star5X, star5Y, starColor);
+    drawStar(star5X, star5Y, starColor5);
   }
   if (star6X != null && star6Y != null) {
-    i = 5;
-    starColor = starColors[i % starColors.length];
-    drawStar(star6X, star6Y, starColor);
+    drawStar(star6X, star6Y, starColor6);
   }
   if (star7X != null && star7Y != null) {
-    i = 6;
-    starColor = starColors[i % starColors.length];
-    drawStar(star7X, star7Y, starColor);
+    drawStar(star7X, star7Y, starColor7);
   }
   if (star8X != null && star8Y != null) {
-    i = 7;
-    starColor = starColors[i % starColors.length];
-    drawStar(star8X, star8Y, starColor);
+    drawStar(star8X, star8Y, starColor8);
   }
   if (star9X != null && star9Y != null) {
-    i = 8;
-    starColor = starColors[i % starColors.length];
-    drawStar(star9X, star9Y, starColor);
+    drawStar(star9X, star9Y, starColor9);
   }
   if (star10X != null && star10Y != null) {
-    i = 9;
-    starColor = starColors[i % starColors.length];
-    drawStar(star10X, star10Y, starColor);
+    drawStar(star10X, star10Y, starColor10);
   }
 
   /// 배열을 사용할 수 없어 주석처리
