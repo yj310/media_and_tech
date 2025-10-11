@@ -30,10 +30,16 @@ let size = {
 /// 얼굴 위치
 let faceX;
 let faceY;
+let faceStartY;
+/// 캐릭터 움직임
+let charBobY = 0;
 
 /// 고양이 위치
 let catX;
 let catY;
+
+// 고양이 꼬리 움직임
+let tailPhase = 0;
 
 /// 눈 라인 위치 (마우스에 따른 위치 이동을 제어하기 위한 변수)
 let eyeLineCloseY = 0;
@@ -91,7 +97,8 @@ let starColor10 = '#ffffff50';
 /// 초기 세팅
 function setup() {
   faceX = 350;
-  faceY = 200;
+  faceStartY = 200;
+  faceY = faceStartY;
   catX = faceX + 80;
   catY = faceY + 300;
 
@@ -104,8 +111,11 @@ function draw() {
 
   background(color.background);
 
-  /// 달
+  /// 요소 움직임
   moveMoon();
+  moveCharactor();
+
+  /// 달
   drawMoon(600, movingMoonY, color.moonColor);
 
   /// 별 
@@ -457,10 +467,10 @@ function drawBlush() {
 
   // fill(`${color.blushColor}20`);
   // ellipse(
-  //   faceX, 
-  //   faceY + 40, 
-  //   40, 
-  //   25, 
+  //   faceX,
+  //   faceY + 40,
+  //   40,
+  //   25,
   // );
 }
 
@@ -815,8 +825,6 @@ function drawEye() {
   lineY = eyeY + 30;
   fill(getColor(color.skinColor));
   stroke(getColor(color.skinColor));
-  // fill('red');
-  // stroke('red');
   strokeWeight(10);
   rect(
     faceX - glabella - eyeWidth / 2,
@@ -969,14 +977,14 @@ function drawEye2() {
   //   faceY + addY - 10,
   //   70,
   //   40,
-  //   PI + 0.4, -0.1,
+  //   PI + 0.4, -0.1
   // );
   // arc(
   //   faceX + (glabella + 10),
   //   faceY + addY - 10,
   //   70,
   //   40,
-  //   PI + 0.1, -0.3,
+  //   PI + 0.1, -0.3
   // );
 }
 
@@ -996,8 +1004,6 @@ function drawBackHair() {
 }
 
 function drawBody() {
-
-
   shoulderHeight = 130;
   bodyY = faceY + 170;
 
@@ -1070,16 +1076,14 @@ function drawBody() {
 
 
   // noFill();
-  // stroke("#dddddd"); 
+  // stroke("#dddddd");
   // strokeWeight(3);
   // line(
-  //   faceX, 
-  //   bodyY + (shoulderHeight / 2),  
-  //   faceX, 
-  //   height,  
+  //   faceX,
+  //   bodyY + (shoulderHeight / 2),
+  //   faceX,
+  //   height
   // );
-
-
 }
 
 function drawNack() {
@@ -1098,7 +1102,9 @@ function getColor(originColor, addColor = "000000", opacity = "ff") {
   return `#${finalColor}${opacity}`;
 }
 
+/// 고양이
 function drawCat() {
+  /// 몸통
   noStroke();
   fill("#333333");
   currentX = catX;
@@ -1115,8 +1121,6 @@ function drawCat() {
     currentX - 5, currentY + 45, // 위치
     100, 120 // 사이즈
   );
-
-
   ellipse(
     currentX - 30, currentY + 90, // 위치
     100, 100 // 사이즈
@@ -1131,19 +1135,34 @@ function drawCat() {
     120, 100 // 사이즈
   );
   ellipse(
-    currentX - 70, currentY + 90, // 위치
+    currentX - 70, currentY + 90, // 위치 
     120, 100 // 사이즈
   );
 
+
+  /// 꼬리
   stroke('#333333');
   strokeWeight(15);
   noFill();
+  let tailX = catX - 130;
+  let tailY = catY + 75;
+
+  /// 꼬리 각도 기준
+  let baseStart = PI - 1.9;
+  let baseEnd = -PI / 2 + 0.1;
+
+  // 꼬리 각도 변화
+  let delta = sin(tailPhase) * 0.3;
+
   arc(
-    catX - 130, catY + 75,
+    tailX, tailY,
     90, 130,
-    PI - 1.9, -PI / 2 + 0.4);
+    baseStart + delta, baseEnd + delta
+  );
 
 
+
+  /// 목 흰털
   noStroke();
   fill("#bbbbbb");
   currentX = catX - 1;
@@ -1153,6 +1172,7 @@ function drawCat() {
     80, 60 // 사이즈
   );
 
+  /// 얼굴
   stroke("#333333");
   strokeWeight(6);
   fill("#333333");
@@ -1161,6 +1181,7 @@ function drawCat() {
     80, 70 // 사이즈
   );
 
+  /// 귀
   triangle(
     catX + 53, catY - 40,
     catX + 40, catY,
@@ -1172,6 +1193,7 @@ function drawCat() {
     catX + 35, catY - 10
   );
 
+  /// 귀 흰부분
   noStroke();
   fill("#666666");
   triangle(
@@ -1185,6 +1207,7 @@ function drawCat() {
     catX - 15, catY - 30
   );
 
+  /// 눈
   stroke('#ffffff');
   strokeWeight(3);
   noFill();
@@ -1201,6 +1224,7 @@ function drawCat() {
   line(lineX, lineY, lineX + lineWidth, lineY + lineHeight);
 
 
+  /// 코
   noStroke();
   fill("#fab4b460");
   catNoseX = catX;
@@ -1210,18 +1234,18 @@ function drawCat() {
     5, 5 // 사이즈
   );
 
-
-
-  noStroke();
-  fill("#bbbbbb");
-  currentX = catX - 5;
-  currentY = catY + 36;
+  /// 입..?
+  // noStroke();
+  // fill("#bbbbbb");
+  // currentX = catX - 5;
+  // currentY = catY + 36;
   // ellipse(
   //   currentX, currentY, // 위치
-  //   30, 16, // 사이즈
+  //   30, 16 // 사이즈
   // );
 
 
+  /// 사람 손
   noStroke();
   fill(getColor(color.skinColor2));
   ellipse(
@@ -1229,6 +1253,7 @@ function drawCat() {
     80, 90 // 사이즈
   );
 
+  /// 사람 팔
   stroke('#707070');
   strokeWeight(75);
   noFill();
@@ -1268,10 +1293,21 @@ function moveMoon() {
   }
 }
 
+function moveCharactor() {
+  prevFaceY = faceY;
+  faceY = faceStartY + charBobY;
+  catY = catY + (faceY - prevFaceY);
+}
+
 /// 틱 세팅
 function setTick() {
   tick += 1;
   tick %= 1000000000;
+
+  /// 캐릭터 움직임
+  charBobY = sin(tick * 0.03) * 6;
+  /// 고양이 꼬리 움직임
+  tailPhase = (tailPhase + 0.05) % TWO_PI;
 }
 
 
