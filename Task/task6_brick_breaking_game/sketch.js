@@ -52,14 +52,8 @@
 ///
 
 
-let color = {
-    background: "#ffbeb3",
-    ball: "#ffffff",
-    ballOutLine: "#999999",
-    pad: "#ffffff",
-    padOutLine: "#999999",
-};
 
+/// values
 let ballX;
 let ballY;
 let ballWidth = 50;
@@ -73,19 +67,19 @@ let padWidth = 80;
 let padHeight = 20;
 
 
+/// color
+let color = {
+    background: "#ffbeb3",
+    ball: "#ffffff",
+    ballOutLine: "#999999",
+    pad: "#ffffff",
+    padOutLine: "#999999",
+};
+
+/// --------------[Basic Action]--------------
 function setup() {
+    setData();
     createCanvas(windowWidth, windowHeight);
-
-    ballX = windowWidth / 2;
-    ballY = windowHeight / 2;
-
-    speed = 4;
-    ballXDir = speed;
-    ballYDir = speed;
-
-    padY = windowHeight - 50;
-
-    background(color.background);
 }
 
 function draw() {
@@ -97,13 +91,26 @@ function draw() {
 }
 
 
+/// --------------[Set Data]--------------
+function setData() {
+    ballX = windowWidth / 2;
+    ballY = windowHeight / 2;
+
+    speed = 4;
+    ballXDir = speed;
+    ballYDir = speed;
+
+    padY = windowHeight - 50;
+}
+
+/// --------------[Interaction]--------------
 function keyPressed() {
     if (key === 's') {
         saveGif('mySketch', 5);
     }
 }
 
-
+/// --------------[Move Entity]--------------
 function moveBall() {
     ballX = ballX + ballXDir;
     ballY = ballY + ballYDir;
@@ -125,6 +132,7 @@ function moveBall() {
 
 }
 
+/// --------------[Draw Entity]--------------
 function drawBall() {
     fill(color.ball);
     stroke(color.ballOutLine);
@@ -150,4 +158,5 @@ function drawPad() {
 
 
 
+/// --------------[Function]--------------
 
