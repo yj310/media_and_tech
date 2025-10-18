@@ -66,15 +66,33 @@ let padY;
 let padWidth = 80;
 let padHeight = 20;
 
+let bricks = [];
+let brickColumnCount = 10;
+let brickRowCount = 6;
+let brickStartX = 10;
+let brickStartY = 20;
+let brickWidth = 60;
+let brickHeight = 20;
+let rowPadding = 4;
+let columnPadding = 4;
 
 /// color
 let color = {
-    background: "#ffbeb3",
+    background: "#faf8f7",
     ball: "#ffffff",
     ballOutLine: "#999999",
     pad: "#ffffff",
     padOutLine: "#999999",
 };
+let strokeColor = '#cccccc';
+let turnOnColor = '#000000';
+let turnOffColor = '#ffffff';
+let brickColors = [
+    '#ffe1e8', '#ffd8dd', '#ffd0d2', '#ffe8c7', '#fff1b6',
+    '#fff6a8', '#e8f8c5', '#d4f7c8', '#c2f5d2', '#b8f3dd',
+    '#b4f0e6', '#b7eced', '#bee6f4', '#c5e0f8', '#cbdcfb',
+    '#d3d8fd', '#dbd5ff', '#e2d4ff', '#ecd5ff', '#f7d9ff'
+];
 
 /// --------------[Basic Action]--------------
 function setup() {
@@ -86,6 +104,9 @@ function draw() {
     background(color.background);
 
     moveBall();
+
+    drawBricks();
+
     drawBall();
     drawPad();
 }
@@ -101,6 +122,16 @@ function setData() {
     ballYDir = speed;
 
     padY = windowHeight - 50;
+
+    /// 벽돌 > 2차원 배열로 초기화
+    for (let y = 0; y < brickRowCount; y++) {
+        let row = [];
+        let currentColor = getBrickColor(y);
+        for (let x = 0; x < brickColumnCount; x++) {
+            row[x] = currentColor;
+        }
+        bricks[y] = row;
+    }
 }
 
 /// --------------[Interaction]--------------
@@ -153,10 +184,20 @@ function drawPad() {
     }
 }
 
-
-
-
+function drawBricks() {
+    for (let y = 0; y < brickRowCount; y++) {
+        for (let x = 0; x < brickColumnCount; x++) {
+            stroke(strokeColor);
+            fill(bricks[y][x]);
+            brickX = brickStartX + x * brickWidth + x * columnPadding;
+            brickY = brickStartY + y * brickHeight + y * rowPadding;
+            rect(brickX, brickY, brickWidth, brickHeight);
+        }
+    }
+}
 
 
 /// --------------[Function]--------------
-
+function getBrickColor(row) {
+    return brickColors[row % brickColors.length];
+}
